@@ -57,4 +57,4 @@ public class TrainerServlet extends HttpServlet {
 
         response.sendRedirect("trainer");
     }
-}
+} 
