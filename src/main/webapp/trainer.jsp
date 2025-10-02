@@ -319,12 +319,12 @@ td {
             <form action="trainer" method="post">
                 <div class="form-group">
                     <label>👤 Trainer Name</label>
-                    <input type="text" name="name" placeholder="Enter trainer name" required>
+                    <input type="text" name="name" placeholder="Enter trainer name" required autocomplete="off">
                 </div>
                 
                 <div class="form-group">
                     <label>📚 Subject</label>
-                    <input type="text" name="subject" placeholder="Enter subject" required>
+                    <input type="text" name="subject" placeholder="Enter subject" required autocomplete="off">
                 </div>
                 
                 <button type="submit" class="btn-primary">Add Trainer</button>

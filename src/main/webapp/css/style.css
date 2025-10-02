@@ -654,7 +654,10 @@ h1, h2, h3, h4, h5,
 
 .slide-1 {
   background-size: cover;
-  background-position: center; }
+  background-position: center; 
+  
+  
+  }
   .slide-1:before {
     content: "";
     position: absolute;

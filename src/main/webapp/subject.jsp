@@ -3,220 +3,430 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Subject Management</title>
+    <title>Subject Management System</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: linear-gradient(to right, #a8c0ff, #bee0ec);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
+            padding: 40px 20px;
         }
 
-        .subject-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            width: 550px;
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
             text-align: center;
-            transition: 0.3s ease-in-out;
-        }
-
-        .subject-container:hover {
-            transform: translateY(-5px);
-        }
-
-        .subject-container img {
-            width: 90px;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        form {
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        input[type="text"], input[type="number"] {
-            padding: 10px;
-            width: 65%;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0,123,255,0.5);
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #28a745;
             color: white;
-            font-size: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
         }
 
-        input[type="submit"]:hover {
-            background-color: #218838;
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
         }
 
-        .search-submit {
-            background-color: #007bff;
-        }
-
-        .search-submit:hover {
-            background-color: #0056b3;
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
         }
 
         .back-link {
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-decoration: none;
-            background: #007bff;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            background: white;
+            color: #667eea;
+            padding: 12px 24px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .back-link:hover {
-            background: #0056b3;
+            background: #667eea;
+            color: white;
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        table {
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+        }
+
+        .left-panel {
+            height: fit-content;
+        }
+
+        .card-title {
+            font-size: 26px;
+            color: #667eea;
+            margin-bottom: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 5px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
         }
 
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
-        th {
-            background-color: #007bff;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #eef7ff;
-        }
-
-        .no-subjects {
-            margin-top: 20px;
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
             font-size: 16px;
-            color: #dc3545;
-            font-weight: bold;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 14px;
+            background: #764ba2;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-search:hover {
+            background: #5d3a82;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
         }
 
         .search-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
+            background: #f8f9fc;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 2px solid #e9ecf5;
         }
 
         .search-section h3 {
             color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .search-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+
+        .subjects-table-card {
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: #667eea;
+        }
+
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+        }
+
+        td {
+            padding: 18px 15px;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #e9ecf5;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecf5;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="subject-container">
+<div class="main-container">
     <a href="trainer.jsp" class="back-link">← Back to Trainer Management</a>
-
-    <h2>Add New Subject</h2>
-    <form action="subject" method="post">
-        <input type="hidden" name="action" value="add">
-        <input type="text" name="name" placeholder="Enter subject name" required>
-        <input type="submit" value="Add">
-    </form>
-
-    <div class="search-section">
-        <h3>Search Subject</h3>
-        <form action="subject" method="get">
-            <input type="hidden" name="action" value="searchById">
-            <input type="number" name="id" placeholder="Search by ID" required>
-            <input type="submit" value="Search" class="search-submit">
-        </form>
-        <br>
-        <form action="subject" method="get">
-            <input type="hidden" name="action" value="searchByName">
-            <input type="text" name="name" placeholder="Search by Name" required>
-            <input type="submit" value="Search" class="search-submit">
-        </form>
+    
+    <div class="header">
+        <h1>📚 Subject Management System</h1>
+        <p>Manage your subjects efficiently</p>
     </div>
 
-    <h2>All Subjects</h2>
+    <div class="content-wrapper">
+        <!-- Add & Search Subject Card -->
+        <div class="left-panel card">
+            <h2 class="card-title">➕ Add New Subject</h2>
+            <form action="subject" method="post">
+                <input type="hidden" name="action" value="add">
+                <div class="form-group">
+                    <label>📖 Subject Name</label>
+                    <input type="text" name="name" placeholder="Enter subject name" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn-primary">Add Subject</button>
+            </form>
 
-    <%
-        List<Subject> subjectList = (List<Subject>) request.getAttribute("subjects");
-        Subject searchResult = (Subject) request.getAttribute("searchResult");
-        
-        if (searchResult != null) {
-    %>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Subject Name</th>
-            </tr>
-            <tr>
-                <td><%= searchResult.getId() %></td>
-                <td><%= searchResult.getName() %></td>
-            </tr>
-        </table>
-    <%
-        } else if (subjectList != null && !subjectList.isEmpty()) {
-    %>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Subject Name</th>
-            </tr>
-    <%
-            for (Subject s : subjectList) {
-    %>
-            <tr>
-                <td><%= s.getId() %></td>
-                <td><%= s.getName() %></td>
-            </tr>
-    <%
-            }
-    %>
-        </table>
-    <%
-        } else {
-    %>
-        <p class="no-subjects">No subjects found.</p>
-    <%
-        }
-    %>
+            <div class="search-section">
+                <h3>🔍 Search Subject</h3>
+                
+                <form action="subject" method="get">
+                    <input type="hidden" name="action" value="searchById">
+                    <div class="form-group">
+                        <label>🆔 Search by ID</label>
+                        <input type="number" name="id" placeholder="Enter subject ID" required>
+                    </div>
+                    <button type="submit" class="btn-search">Search by ID</button>
+                </form>
+
+                <div class="search-divider"></div>
+
+                <form action="subject" method="get">
+                    <input type="hidden" name="action" value="searchByName">
+                    <div class="form-group">
+                        <label>📝 Search by Name</label>
+                        <input type="text" name="name" placeholder="Enter subject name" required>
+                    </div>
+                    <button type="submit" class="btn-search">Search by Name</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Subjects List Card -->
+        <div class="subjects-table-card card">
+            <h2 class="card-title">📋 All Subjects</h2>
+            
+            <%
+                List<Subject> subjectList = (List<Subject>) request.getAttribute("subjects");
+                Subject searchResult = (Subject) request.getAttribute("searchResult");
+                int subjectCount = (subjectList != null) ? subjectList.size() : 0;
+            %>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number"><%=subjectCount%></div>
+                    <div class="stat-label">Total Subjects</div>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🆔 ID</th>
+                            <th>📚 Subject Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            if (searchResult != null) {
+                        %>
+                        <tr>
+                            <td><strong>#<%=searchResult.getId()%></strong></td>
+                            <td><span class="badge"><%=searchResult.getName()%></span></td>
+                        </tr>
+                        <%
+                            } else if (subjectList != null && !subjectList.isEmpty()) {
+                                for (Subject s : subjectList) {
+                        %>
+                        <tr>
+                            <td><strong>#<%=s.getId()%></strong></td>
+                            <td><span class="badge"><%=s.getName()%></span></td>
+                        </tr>
+                        <%
+                                }
+                            } else {
+                        %>
+                        <tr>
+                            <td colspan="2" class="no-data">
+                                📭 No subjects found. Add your first subject to get started!
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

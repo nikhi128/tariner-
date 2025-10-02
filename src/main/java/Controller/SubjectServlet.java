@@ -44,6 +44,9 @@ public class SubjectServlet extends HttpServlet {
             List<Subject> subjectList = sdao.getAllSubjects();
             req.setAttribute("subjects", subjectList);
             req.getRequestDispatcher("subject.jsp").forward(req, res);
+            
+            //  my change 
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
