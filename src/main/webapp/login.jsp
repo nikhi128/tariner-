@@ -275,6 +275,7 @@ body {
             
             <button type="submit" class="btn-primary">Login</button>
         </form>
+<p><a href="forgotPassword.jsp">Forgot Password?</a></p>
 
         <div class="divider">OR</div>
 

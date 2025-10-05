@@ -42,6 +42,7 @@ public class SubjectDAO {
         Connection conn = DBUtil.getConnection();
         String sql = "SELECT * FROM subject WHERE id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        //
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         Subject s = null;
@@ -73,4 +74,15 @@ public class SubjectDAO {
         conn.close();
         return s;
     }
+    
+    public void deleteSubject(int id) throws Exception {
+        Connection conn = DBUtil.getConnection();
+        String sql = "DELETE FROM subject WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.executeUpdate();
+        ps.close();
+        conn.close();
+    }
+
 }

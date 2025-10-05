@@ -174,6 +174,24 @@
             box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
         }
 
+        .btn-delete {
+            padding: 8px 16px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
         .search-section {
             background: #f8f9fc;
             padding: 25px;
@@ -182,11 +200,24 @@
             border: 2px solid #e9ecf5;
         }
 
-        .search-section h3 {
+        .delete-section {
+            background: #fff5f5;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 2px solid #ffc9c9;
+        }
+
+        .search-section h3,
+        .delete-section h3 {
             color: #2c3e50;
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 600;
+        }
+
+        .delete-section h3 {
+            color: #e74c3c;
         }
 
         .search-divider {
@@ -292,6 +323,10 @@
             letter-spacing: 0.5px;
         }
 
+        .action-cell {
+            text-align: center;
+        }
+
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -320,6 +355,13 @@
             }
         }
     </style>
+    <script>
+        function confirmDelete(subjectId, subjectName) {
+            if (confirm('Are you sure you want to delete "' + subjectName + '"?')) {
+                document.getElementById('deleteForm_' + subjectId).submit();
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -367,6 +409,19 @@
                     <button type="submit" class="btn-search">Search by Name</button>
                 </form>
             </div>
+
+            <div class="delete-section">
+                <h3>🗑️ Delete Subject</h3>
+                
+                <form action="subject" method="post">
+                    <input type="hidden" name="action" value="delete">
+                    <div class="form-group">
+                        <label>🆔 Subject ID</label>
+                        <input type="number" name="id" placeholder="Enter subject ID to delete" required>
+                    </div>
+                    <button type="submit" class="btn-delete" style="width: 100%;">Delete Subject</button>
+                </form>
+            </div>
         </div>
 
         <!-- Subjects List Card -->
@@ -376,6 +431,7 @@
             <%
                 List<Subject> subjectList = (List<Subject>) request.getAttribute("subjects");
                 Subject searchResult = (Subject) request.getAttribute("searchResult");
+                String action = request.getParameter("action");
                 int subjectCount = (subjectList != null) ? subjectList.size() : 0;
             %>
             
@@ -392,30 +448,57 @@
                         <tr>
                             <th>🆔 ID</th>
                             <th>📚 Subject Name</th>
+                            <th style="text-align: center;">⚡ Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            if (searchResult != null) {
+                            if ("searchById".equals(action) || "searchByName".equals(action)) {
+                                if (searchResult != null) {
                         %>
                         <tr>
                             <td><strong>#<%=searchResult.getId()%></strong></td>
                             <td><span class="badge"><%=searchResult.getName()%></span></td>
+                            <td class="action-cell">
+                                <form id="deleteForm_<%=searchResult.getId()%>" action="subject" method="post" style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<%=searchResult.getId()%>">
+                                    <button type="button" class="btn-delete" onclick="confirmDelete(<%=searchResult.getId()%>, '<%=searchResult.getName()%>')">
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         <%
+                                } else {
+                        %>
+                        <tr>
+                            <td colspan="3" class="no-data">❌ No subject found for your search.</td>
+                        </tr>
+                        <%
+                                }
                             } else if (subjectList != null && !subjectList.isEmpty()) {
                                 for (Subject s : subjectList) {
                         %>
                         <tr>
                             <td><strong>#<%=s.getId()%></strong></td>
                             <td><span class="badge"><%=s.getName()%></span></td>
+                            <td class="action-cell">
+                                <form id="deleteForm_<%=s.getId()%>" action="subject" method="post" style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<%=s.getId()%>">
+                                    <button type="button" class="btn-delete" onclick="confirmDelete(<%=s.getId()%>, '<%=s.getName()%>')">
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         <%
                                 }
                             } else {
                         %>
                         <tr>
-                            <td colspan="2" class="no-data">
+                            <td colspan="3" class="no-data">
                                 📭 No subjects found. Add your first subject to get started!
                             </td>
                         </tr>
